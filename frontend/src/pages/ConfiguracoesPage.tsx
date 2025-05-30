@@ -5,10 +5,10 @@ import AlterarSenhaForm from '../components/configuracoes/AlterarSenhaForm';
 import { useAuth } from '../contexts/AuthContext';
 
 const ConfiguracoesPage: React.FC = () => {
-  const { user } = useAuth(); // Para pegar os dados do usuário atual
+  const { user } = useAuth();
 
   if (!user) {
-    return <Typography>Carregando dados do usuário...</Typography>; // Ou um spinner
+    return <Typography>Carregando dados do usuário...</Typography>;
   }
 
   return (

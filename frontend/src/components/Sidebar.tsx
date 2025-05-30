@@ -70,29 +70,27 @@ export default function Sidebar() {
         "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
-      {/* Exibindo nome do usuário e email, se logado */}
       {user && (
         <Box 
           sx={{ 
             display: 'flex', 
-            flexDirection: 'column', // Para alinhar avatar e nome verticalmente
-            alignItems: 'center', // Centralizar itens
+            flexDirection: 'column',
+            alignItems: 'center',
             p: 2, 
             borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-            mb: 1, // Margem inferior para separar do menu
+            mb: 1,
           }}
         >
           <Avatar sx={{ bgcolor: deepOrange[500], width: 56, height: 56, mb: 1, fontSize: '1.5rem' }}>
             {iniciais}
           </Avatar>
-          <Typography variant="subtitle1" fontWeight="medium"> {/* Usar subtitle1 e fontWeight */}
+          <Typography variant="subtitle1" fontWeight="medium">
             {nomeCurto}
           </Typography>
-          {/* <Typography variant="body2" color="text.secondary">{user.email}</Typography> // Email removido */}
         </Box>
       )}
 
-      <List sx={{flexGrow: 1}}> {/* flexGrow para empurrar o logout para baixo se a sidebar for alta */}
+      <List sx={{flexGrow: 1}}>
         {menuItems.map((item) => (
           <ListItem component={RouterLink} to={item.path} key={item.text} disablePadding>
             <ListItemButton>
@@ -103,7 +101,7 @@ export default function Sidebar() {
         ))}
       </List>
 
-     <Box sx={{ mt: 'auto' }}> {/* Empurra para o final */}
+     <Box sx={{ mt: 'auto' }}>
         <Divider />
         <List>
           <ListItemButton onClick={handleLogout}>

@@ -18,35 +18,32 @@ export class AtivoRepository {
     return result.rows[0];
   }
 
-  // ...
-static async buscarPorId(id: number): Promise<IAtivoResponse | null> { // Mantenha IAtivoResponse por enquanto
-  const result = await pool.query(
-    `SELECT 
-       ATV_ID as "id", 
-       USR_ID as "usuarioId",  -- Forçando o casing para corresponder à interface
-       ATV_NOME as "nome",
-       ATV_DESCRICAO as "descricao", 
-       TO_CHAR(ATV_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') as "criadoEm"
-     FROM ativos 
-     WHERE ATV_ID = $1`,
-    [id]
-  );
-  console.log('DEBUG AtivoRepository.buscarPorId - Linha retornada:', result.rows[0]); 
-  
-  if (result.rows[0]) {
-    // A interface IAtivoResponse espera criadoEm como string. Vamos formatar aqui no código.
-    const row = result.rows[0];
-    return {
-      id: row.id,
-      usuarioId: row.usuarioId, // Deve vir como 'usuarioId' por causa do alias com aspas
-      nome: row.nome,
-      descricao: row.descricao,
-      criadoEm: row.atv_created_at ? new Date(row.atv_created_at).toISOString() : '' // Formata para string ISO
-    };
+  static async buscarPorId(id: number): Promise<IAtivoResponse | null> {
+    const result = await pool.query(
+      `SELECT 
+         ATV_ID as "id", 
+         USR_ID as "usuarioId",  
+         ATV_NOME as "nome",
+         ATV_DESCRICAO as "descricao", 
+         TO_CHAR(ATV_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') as "criadoEm"
+       FROM ativos 
+       WHERE ATV_ID = $1`,
+      [id]
+    );
+    console.log('DEBUG AtivoRepository.buscarPorId - Linha retornada:', result.rows[0]); 
+    
+    if (result.rows[0]) {
+      const row = result.rows[0];
+      return {
+        id: row.id,
+        usuarioId: row.usuarioId,
+        nome: row.nome,
+        descricao: row.descricao,
+        criadoEm: row.atv_created_at ? new Date(row.atv_created_at).toISOString() : ''
+      };
+    }
+    return result.rows[0] || null;
   }
-  return result.rows[0] || null;
-}
-// ...
 
   static async listarPorUsuario(usuarioId: number): Promise<IAtivoResponse[]> {
     const result = await pool.query(

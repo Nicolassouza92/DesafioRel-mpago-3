@@ -12,7 +12,7 @@ declare module 'express' {
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
     const token = req.cookies.token;~
-    console.log('AUTH MIDDLEWARE: Cookies recebidos:', req.cookies); // <--- ADICIONE ISSO
+    console.log('AUTH MIDDLEWARE: Cookies recebidos:', req.cookies);
     console.log('AUTH MIDDLEWARE: Token do cookie:', token);
 
     if (!token) {
@@ -22,7 +22,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { id: number; email: string; iat: number; exp: number }; // Tipagem mais explícita para decoded
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { id: number; email: string; iat: number; exp: number };
         console.log('AUTH MIDDLEWARE: Token decodificado:', decoded);
         
         if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'email' in decoded) {

@@ -14,10 +14,10 @@ interface ConfirmacaoDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   title: string;
-  contentText: string | React.ReactNode; // Permite JSX no conteúdo
+  contentText: string | React.ReactNode;
   confirmButtonText?: string;
   cancelButtonText?: string;
-  isConfirming?: boolean; // Para mostrar loading no botão de confirmar
+  isConfirming?: boolean;
 }
 
 const ConfirmacaoDialog: React.FC<ConfirmacaoDialogProps> = ({
@@ -39,7 +39,7 @@ const ConfirmacaoDialog: React.FC<ConfirmacaoDialogProps> = ({
     >
       <DialogTitle id="confirmacao-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText component="div" id="confirmacao-dialog-description"> {/* component="div" para permitir ReactNode */}
+        <DialogContentText component="div" id="confirmacao-dialog-description">
           {contentText}
         </DialogContentText>
       </DialogContent>

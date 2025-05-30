@@ -2,7 +2,7 @@ export interface IManutencao {
   id: number;
   ativoId: number;
   descricaoServico: string;
-  descricaoDetalhada?: string; // Agora opcional
+  descricaoDetalhada?: string;
   dataExecucao: Date;
   proximaData?: Date;
   criadoEm: Date;
@@ -11,16 +11,16 @@ export interface IManutencao {
 export interface IManutencaoCreate {
   ativoId: number;
   descricaoServico: string;
-  descricaoDetalhada?: string; // Opcional na criação
+  descricaoDetalhada?: string;
   dataExecucao: Date; 
   proximaData?: Date; 
 }
 
 export interface IManutencaoUpdate {
   descricaoServico?: string;
-  descricaoDetalhada?: string | null; // Permitir string ou null para limpar explicitamente
+  descricaoDetalhada?: string | null;
   dataExecucao?: Date;
-  proximaData?: Date | null; // Permitir Date ou null para limpar explicitamente
+  proximaData?: Date | null;
 }
 
 export interface IManutencaoResponse {
@@ -28,7 +28,7 @@ export interface IManutencaoResponse {
   ativoId: number;
   nomeAtivo?: string; 
   descricaoServico: string;
-  descricaoDetalhada?: string; // Opcional na resposta
+  descricaoDetalhada?: string;
   dataExecucao: string; 
   proximaData?: string; 
   criadoEm: string; 

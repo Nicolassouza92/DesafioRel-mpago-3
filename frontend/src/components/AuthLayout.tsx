@@ -5,7 +5,7 @@ import { Container, Box, CssBaseline } from '@mui/material';
 const AuthLayout: React.FC = () => {
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline /> {/* Garante estilos base consistentes */}
+      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -14,7 +14,7 @@ const AuthLayout: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {/* As páginas de Login ou Registro serão renderizadas aqui */}
+        
         <Outlet />
       </Box>
     </Container>

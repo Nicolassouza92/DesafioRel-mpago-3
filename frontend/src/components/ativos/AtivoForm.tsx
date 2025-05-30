@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, CircularProgress, Alert } from '@mui/material';
-import type { IAtivoFormData } from '../../api/ativoService'; // Importando a interface do service
-import type { IAtivoResponse } from '../../../../backend/src/interfaces/ativo.interface'; // Ajuste o caminho
+import type { IAtivoFormData } from '../../api/ativoService';
+import type { IAtivoResponse } from '../../../../backend/src/interfaces/ativo.interface';
 
 interface AtivoFormProps {
-  onSave: (ativoData: IAtivoFormData, id?: number) => Promise<void>; // Pode receber ID para edição
+  onSave: (ativoData: IAtivoFormData, id?: number) => Promise<void>;
   onCancel: () => void;
-  initialData?: IAtivoResponse | null; // Para preencher o formulário na edição
+  initialData?: IAtivoResponse | null;
   isLoading?: boolean;
 }
 
@@ -20,7 +20,6 @@ const AtivoForm: React.FC<AtivoFormProps> = ({ onSave, onCancel, initialData, is
       setNome(initialData.nome);
       setDescricao(initialData.descricao || '');
     } else {
-      // Reset para criação
       setNome('');
       setDescricao('');
     }
@@ -38,7 +37,7 @@ const AtivoForm: React.FC<AtivoFormProps> = ({ onSave, onCancel, initialData, is
   const ativoData: IAtivoFormData = { nome, descricao };
   
   try {
-    await onSave(ativoData, initialData?.id); // Passa o ID se for edição
+    await onSave(ativoData, initialData?.id);
   } catch (error: unknown) {
     if (error instanceof Error) {
       setFormError(error.message || 'Ocorreu um erro ao salvar o ativo.');

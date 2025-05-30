@@ -17,7 +17,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     try {
       await login(email, senha);
-      navigate("/"); // Redireciona para o dashboard após login bem-sucedido
+      navigate("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -35,9 +35,9 @@ const LoginForm: React.FC = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 2, // Espaçamento entre os campos
+        gap: 2,
         maxWidth: 400,
-        margin: "auto", // Centralizar o formulário
+        margin: "auto",
         padding: 3,
         boxShadow: 3,
         borderRadius: 2,

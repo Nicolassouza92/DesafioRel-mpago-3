@@ -13,12 +13,12 @@ import {
   TableBody,
   IconButton,
   Tooltip,
-  Snackbar, // Adicionado
-  Modal, // Adicionado
+  Snackbar,
+  Modal,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from "@mui/icons-material/Close"; // Adicionado
+import CloseIcon from "@mui/icons-material/Close";
 import * as manutencaoService from "../api/manutencaoService";
 import type {
   IManutencaoResponse,
@@ -32,7 +32,7 @@ import ManutencaoForm from "../components/manutencoes/ManutencaoForm";
 const HistoricoPage: React.FC = () => {
   const [manutencoes, setManutencoes] = useState<IManutencaoResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [pageError, setPageError] = useState<string | null>(null); // Renomeado de error para pageError
+  const [pageError, setPageError] = useState<string | null>(null);
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [manutencaoParaDeletar, setManutencaoParaDeletar] =
@@ -99,8 +99,8 @@ const HistoricoPage: React.FC = () => {
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Erro ao deletar manutenção.";
-      setPageError(errorMessage); // Mostra no Alert da página
-      setSnackbarMessage(errorMessage); // E também no Snackbar
+      setPageError(errorMessage);
+      setSnackbarMessage(errorMessage);
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
       console.error("Erro ao deletar manutenção:", err);
@@ -139,7 +139,6 @@ const HistoricoPage: React.FC = () => {
             ? null
             : undefined,
         };
-        // Remove chaves com valor undefined para não enviar ao backend se não foram alteradas
         Object.keys(dadosParaAtualizar).forEach(
           (key) =>
             dadosParaAtualizar[key as keyof typeof dadosParaAtualizar] ===
@@ -405,7 +404,7 @@ const HistoricoPage: React.FC = () => {
               ativoId={editingManutencao.ativoId}
               onSave={handleSaveManutencao}
               onCancel={handleCloseManutencaoModal}
-              initialData={editingManutencao} // Passa os dados da manutenção para edição
+              initialData={editingManutencao}
               isLoading={formSubmitting}
             />
           </Paper>
@@ -415,13 +414,14 @@ const HistoricoPage: React.FC = () => {
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
-        onClose={handleSnackbarClose} // Agora a assinatura bate
+        onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
-          onClose={handleSnackbarClose} // O Alert interno também tem um onClose que pode ser usado para fechar o Snackbar
-          severity={snackbarSeverity} 
-          sx={{ width: '100%' }} 
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }
+          }
           variant="filled"
         >
           {snackbarMessage}

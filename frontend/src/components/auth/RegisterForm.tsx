@@ -23,10 +23,6 @@ const RegisterForm: React.FC = () => {
     setLoading(true);
     try {
       await register(nome, email, senha);
-      // Idealmente, o backend já logaria o usuário e o register no AuthContext lidaria com isso.
-      // Se não, poderíamos chamar login() aqui ou o backend retornar os dados para popular o user.
-      // Pela nossa configuração anterior do backend (login retorna o usuário),
-      // e o AuthContext.register também pode popular o usuário.
       navigate("/"); // Redireciona para o dashboard após registro
     } catch (err: unknown) {
       if (err instanceof Error) {

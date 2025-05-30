@@ -113,7 +113,7 @@ static async atualizarUsuario(id: number, dados: IUserUpdate): Promise<IUserResp
     res.cookie('token', '', {
       httpOnly: true,
       expires: new Date(0),
-      secure: process.env.NODE_ENV === 'production', // Adicionar em produção
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict', // Boa prática
     });
   }

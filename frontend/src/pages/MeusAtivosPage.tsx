@@ -9,7 +9,7 @@ import {
   Modal,
   Paper,
   IconButton,
-  Snackbar, // Adicionado para feedback
+  Snackbar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,10 +19,11 @@ import * as ativoService from "../api/ativoService";
 import * as manutencaoService from "../api/manutencaoService";
 import type { IAtivoFormData } from '../api/ativoService';
 import type { IManutencaoFormData } from '../api/manutencaoService';
-import type { IAtivoResponse } from "../../../backend/src/interfaces/ativo.interface"; // Ajuste o caminho
+import type { IAtivoResponse } from "../../../backend/src/interfaces/ativo.interface";
+import type { SnackbarCloseReason } from '@mui/material';
 import AtivoForm from "../components/ativos/AtivoForm";
 import ManutencaoForm from "../components/manutencoes/ManutencaoForm";
-import ConfirmacaoDialog from "../components/common/ConfirmacaoDialog"; // Para deleção de ativo
+import ConfirmacaoDialog from "../components/common/ConfirmacaoDialog";
 
 
 interface AtivoCardProps {
@@ -80,7 +81,7 @@ const AtivoCard: React.FC<AtivoCardProps> = ({
 const MeusAtivosPage: React.FC = () => {
   const [ativos, setAtivos] = useState<IAtivoResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [pageError, setPageError] = useState<string | null>(null); // Erro geral da página
+  const [pageError, setPageError] = useState<string | null>(null);
   
   const [isAtivoModalOpen, setIsAtivoModalOpen] = useState(false);
   const [editingAtivo, setEditingAtivo] = useState<IAtivoResponse | null>(null);
@@ -93,9 +94,7 @@ const MeusAtivosPage: React.FC = () => {
   const [isManutencaoModalOpen, setIsManutencaoModalOpen] = useState(false);
   const [currentAtivoIdParaManutencao, setCurrentAtivoIdParaManutencao] = useState<number | null>(null);
   const [currentAtivoNomeParaManutencao, setCurrentAtivoNomeParaManutencao] = useState<string>('');
-  // const [editingManutencao, setEditingManutencao] = useState<IManutencaoResponse | null>(null); 
 
-  // Estado para Snackbar de feedback
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
@@ -153,7 +152,6 @@ const MeusAtivosPage: React.FC = () => {
     } catch (err: unknown) {
       console.error("Erro ao salvar ativo:", err);
       const msg = err instanceof Error ? err.message : (id ? "Erro ao atualizar ativo." : "Erro ao criar ativo.");
-      // O AtivoForm já mostra o erro, mas podemos também mostrar um Snackbar de erro
       setSnackbarMessage(msg);
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -183,8 +181,8 @@ const MeusAtivosPage: React.FC = () => {
       handleCloseDeleteDialog();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Erro ao deletar ativo.";
-      setPageError(msg); // Pode mostrar no Alert da página
-      setSnackbarMessage(msg); // E/ou no Snackbar
+      setPageError(msg); 
+      setSnackbarMessage(msg); 
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
       console.error(msg, err);
@@ -225,8 +223,6 @@ const MeusAtivosPage: React.FC = () => {
         await manutencaoService.criarManutencao(dadosParaCriar);
         setSnackbarMessage('Manutenção registrada com sucesso!');
         setSnackbarSeverity('success');
-        // Idealmente, o painel de pendências ou o histórico se atualizariam.
-        // Se o AtivoCard mostrasse um resumo das manutenções, chamar fetchAtivos() aqui seria útil.
       }
       setSnackbarOpen(true);
       handleCloseManutencaoModal();
@@ -241,7 +237,7 @@ const MeusAtivosPage: React.FC = () => {
     }
   };
 
-  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason | string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -277,7 +273,7 @@ const MeusAtivosPage: React.FC = () => {
 
       <Grid container spacing={2} rowSpacing={2}>
         {ativos.map((ativo) => (
-          <Grid key={ativo.id} size={{ xs: 12, sm: 6, md: 4 }} sx={{ mb: 3 }}>
+          <Grid key={ativo.id} size={{xs:12, sm:6, md:4}}>
             <AtivoCard
               ativo={ativo}
               onEditar={handleOpenEditarAtivoModal}
@@ -288,7 +284,6 @@ const MeusAtivosPage: React.FC = () => {
         ))}
       </Grid>
 
-      {/* Modal para Adicionar/Editar Ativo */}
       <Modal open={isAtivoModalOpen} onClose={handleCloseAtivoModal} aria-labelledby="ativo-form-modal-title">
         <Paper sx={{ 
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -303,7 +298,6 @@ const MeusAtivosPage: React.FC = () => {
         </Paper>
       </Modal>
 
-      {/* Dialog para Confirmação de Deleção de Ativo */}
       {ativoParaDeletar && (
         <ConfirmacaoDialog
           open={isDeleteDialogOpen}
@@ -322,7 +316,6 @@ const MeusAtivosPage: React.FC = () => {
         />
       )}
 
-      {/* Modal para Adicionar/Editar Manutenção */}
       {currentAtivoIdParaManutencao && (
         <Modal
           open={isManutencaoModalOpen}
@@ -346,7 +339,6 @@ const MeusAtivosPage: React.FC = () => {
               onSave={handleSaveManutencao}
               onCancel={handleCloseManutencaoModal}
               isLoading={formSubmitting}
-              // initialData={editingManutencao} // Para futura edição
             />
           </Paper>
         </Modal>
@@ -355,10 +347,9 @@ const MeusAtivosPage: React.FC = () => {
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
-        onClose={handleSnackbarClose} // Assinatura correta agora
+        onClose={handleSnackbarClose} 
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        {/* O Alert dentro do Snackbar permite estilização por severidade */}
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }} variant="filled">
           {snackbarMessage}
         </Alert>

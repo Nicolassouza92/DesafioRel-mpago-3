@@ -6,20 +6,17 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import * as manutencaoService from '../api/manutencaoService';
 import type { IManutencaoPendentePainel } from '../../../backend/src/interfaces/manutencao.interface';
-import type { IManutencaoFormData } from '../api/manutencaoService'; // Importar para o save
-import ManutencaoForm from './manutencoes/ManutencaoForm'; // Importar o formulário
+import type { IManutencaoFormData } from '../api/manutencaoService';
+import ManutencaoForm from './manutencoes/ManutencaoForm';
 
 export default function PainelManutencoesPendentes() {
   const [pendencias, setPendencias] = useState<IManutencaoPendentePainel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Estados para o Modal de Manutenção
   const [isManutencaoModalOpen, setIsManutencaoModalOpen] = useState(false);
-  // Guarda a pendência selecionada para pré-preencher o formulário
   const [manutencaoSelecionadaParaRegistro, setManutencaoSelecionadaParaRegistro] = useState<IManutencaoPendentePainel | null>(null);
   const [formSubmitting, setFormSubmitting] = useState(false);
-
 
   const fetchPendencias = async () => {
     try {
@@ -53,8 +50,6 @@ export default function PainelManutencoesPendentes() {
   };
 
   const handleSaveManutencao = async (manutencaoData: IManutencaoFormData) => {
-    // O ativoId já está em manutencaoData, pois ManutencaoForm o incluirá.
-    // Se ManutencaoForm não incluir ativoId, precisamos pegá-lo de manutencaoSelecionadaParaRegistro.
     if (!manutencaoSelecionadaParaRegistro?.ativoId) {
         setError("Não foi possível identificar o ativo para registrar a manutenção.");
         return;
@@ -62,7 +57,6 @@ export default function PainelManutencoesPendentes() {
 
     setFormSubmitting(true);
     try {
-        // Certifique-se que manutencaoData inclui ativoId, ou adicione-o:
         const dadosCompletosParaCriar: IManutencaoFormData = {
             ...manutencaoData,
             ativoId: manutencaoSelecionadaParaRegistro.ativoId,
@@ -71,18 +65,15 @@ export default function PainelManutencoesPendentes() {
       await manutencaoService.criarManutencao(dadosCompletosParaCriar);
       alert('Manutenção registrada com sucesso! O painel será atualizado.');
       handleCloseManutencaoModal();
-      fetchPendencias(); // ATUALIZA O PAINEL!
+      fetchPendencias();
     } catch (err: unknown) {
-      // O ManutencaoForm deve tratar seus próprios erros, mas podemos logar aqui
       console.error("Erro ao salvar manutenção a partir do painel:", err);
-      // Poderia setar um erro no Alert do painel se o ManutencaoForm não mostrar
       if (err instanceof Error) { setError(err.message); } 
       else { setError("Erro desconhecido ao salvar manutenção.");}
     } finally {
       setFormSubmitting(false);
     }
   };
-
 
   if (loading) {
     return (
@@ -126,7 +117,6 @@ export default function PainelManutencoesPendentes() {
         );
       })}
 
-      {/* Modal para Registrar Manutenção */}
       {manutencaoSelecionadaParaRegistro && (
         <Modal
           open={isManutencaoModalOpen}
@@ -147,7 +137,7 @@ export default function PainelManutencoesPendentes() {
             </Box>
             <ManutencaoForm
               ativoId={manutencaoSelecionadaParaRegistro.ativoId}
-              initialDescricaoServico={manutencaoSelecionadaParaRegistro.descricaoServico} // Passando a descrição
+              initialDescricaoServico={manutencaoSelecionadaParaRegistro.descricaoServico}
               onSave={handleSaveManutencao}
               onCancel={handleCloseManutencaoModal}
               isLoading={formSubmitting}

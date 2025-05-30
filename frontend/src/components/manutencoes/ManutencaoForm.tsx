@@ -4,10 +4,10 @@ import {
   Button, 
   Box,  
   CircularProgress, 
-  Alert, // Para agrupar label e input de data // Para label de data
+  Alert, 
 } from '@mui/material';
-import type { IManutencaoFormData } from '../../api/manutencaoService'; // Ajuste o caminho se necessário
-import type { IManutencaoResponse } from '../../../../backend/src/interfaces/manutencao.interface'; // Ajuste o caminho
+import type { IManutencaoFormData } from '../../api/manutencaoService';
+import type { IManutencaoResponse } from '../../../../backend/src/interfaces/manutencao.interface';
 
 interface ManutencaoFormProps {
   ativoId: number;
@@ -33,16 +33,15 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialData) { // Modo Edição
+    if (initialData) {
       setDescricaoServico(initialData.descricaoServico || '');
       setDescricaoDetalhada(initialData.descricaoDetalhada || '');
-      // Assegura que a data vinda do backend (YYYY-MM-DD string) seja usada diretamente
       setDataExecucao(initialData.dataExecucao || new Date().toISOString().split('T')[0]);
       setProximaData(initialData.proximaData || '');
-    } else { // Modo Criação
+    } else {
       setDescricaoServico(initialDescricaoServico || '');
       setDescricaoDetalhada('');
-      setDataExecucao(new Date().toISOString().split('T')[0]); // Padrão para hoje
+      setDataExecucao(new Date().toISOString().split('T')[0]);
       setProximaData('');
     }
   }, [initialData, initialDescricaoServico]);
@@ -59,22 +58,21 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
       setFormError('A data de execução é obrigatória.');
       return;
     }
-    // Validação opcional para proximaData, se preenchida, não ser anterior à dataExecucao
     if (proximaData && dataExecucao && new Date(proximaData) < new Date(dataExecucao)) {
       setFormError('A próxima data de manutenção não pode ser anterior à data de execução.');
       return;
     }
 
     const manutencaoDataPayload: IManutencaoFormData = {
-      ativoId, // Já é uma prop, não precisa vir de initialData para criação
+      ativoId,
       descricaoServico,
       descricaoDetalhada,
       dataExecucao,
-      proximaData: proximaData || undefined, // Enviar undefined se vazio para o backend tratar como NULL
+      proximaData: proximaData || undefined,
     };
     
     try {
-      await onSave(manutencaoDataPayload, initialData?.id); // Passa o ID da manutenção se for edição
+      await onSave(manutencaoDataPayload, initialData?.id);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setFormError(error.message || 'Ocorreu um erro ao salvar a manutenção.');
@@ -86,7 +84,6 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate>
-      {/* Título do formulário é gerenciado pelo componente pai (Modal) */}
       {formError && <Alert severity="error" sx={{ mb: 2 }}>{formError}</Alert>}
       
       <TextField
@@ -96,11 +93,11 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
         id="descricaoServico"
         label="Descrição do Serviço"
         name="descricaoServico"
-        autoFocus={!initialData} // Autofocus apenas na criação ou se não houver descrição pré-preenchida
+        autoFocus={!initialData}
         value={descricaoServico}
         onChange={(e) => setDescricaoServico(e.target.value)}
         disabled={isLoading}
-        InputLabelProps={{ shrink: true }} // Mantém o label "encolhido" se houver valor inicial
+        InputLabelProps={{ shrink: true }}
       />
       
       <TextField
@@ -128,7 +125,6 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
         onChange={(e) => setProximaData(e.target.value)}
         InputLabelProps={{ shrink: true }}
         disabled={isLoading}
-        // Adicionar validação visual se proximaData for anterior a dataExecucao pode ser feito com sx
         error={!!(proximaData && dataExecucao && new Date(proximaData) < new Date(dataExecucao))}
         helperText={
           proximaData && dataExecucao && new Date(proximaData) < new Date(dataExecucao)
@@ -143,7 +139,7 @@ const ManutencaoForm: React.FC<ManutencaoFormProps> = ({
         label="Descrição Detalhada (Opcional)"
         name="descricaoDetalhada"
         multiline
-        rows={4} // Aumentei um pouco
+        rows={4}
         value={descricaoDetalhada}
         onChange={(e) => setDescricaoDetalhada(e.target.value)}
         disabled={isLoading}

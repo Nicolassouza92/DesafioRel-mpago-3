@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useAuth } from "../../contexts/AuthContext";
-import * as userService from "../../api/userService"; // Usaremos o mesmo service
-import type { IUserUpdate } from "../../../../backend/src/interfaces/user.interface"; // Ajuste o caminho
+import * as userService from "../../api/userService";
+import type { IUserUpdate } from "../../../../backend/src/interfaces/user.interface";
 
 const AlterarSenhaForm: React.FC = () => {
-  const { user } = useAuth(); // Para pegar o ID do usuário logado
+  const { user } = useAuth();
   const [senhaAtual, setSenhaAtual] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarNovaSenha, setConfirmarNovaSenha] = useState("");
@@ -55,7 +55,6 @@ const AlterarSenhaForm: React.FC = () => {
       
       await userService.atualizarUsuario(user.id, dadosUpdate);
       setSuccess("Senha alterada com sucesso!");
-      // Limpar campos após sucesso
       setSenhaAtual("");
       setNovaSenha("");
       setConfirmarNovaSenha("");

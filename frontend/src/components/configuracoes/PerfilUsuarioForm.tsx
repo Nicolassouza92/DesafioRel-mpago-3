@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, CircularProgress, Alert as MuiAlert } from '@mui/material'; // Renomeado Alert para MuiAlert
+import { TextField, Button, Box, CircularProgress, Alert as MuiAlert } from '@mui/material';
 import { useAuth } from '../../contexts/AuthContext';
-import * as userService from '../../api/userService'; // Precisaremos de um userService
-import type { IUserResponse, IUserUpdate } from '../../../../backend/src/interfaces/user.interface'; // Ajuste o caminho
+import * as userService from '../../api/userService';
+import type { IUserResponse, IUserUpdate } from '../../../../backend/src/interfaces/user.interface';
 
 interface PerfilUsuarioFormProps {
-  usuarioAtual: IUserResponse; // Recebe os dados atuais do usuário
+  usuarioAtual: IUserResponse;
 }
 
 const PerfilUsuarioForm: React.FC<PerfilUsuarioFormProps> = ({ usuarioAtual }) => {
@@ -14,9 +14,8 @@ const PerfilUsuarioForm: React.FC<PerfilUsuarioFormProps> = ({ usuarioAtual }) =
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const { checkAuthStatus } = useAuth(); // Para atualizar o nome na sidebar, se necessário
+  const { checkAuthStatus } = useAuth();
 
-  // Atualiza o formulário se o usuário no contexto mudar (embora improvável aqui)
   useEffect(() => {
     setNome(usuarioAtual.nome);
     setEmail(usuarioAtual.email);
@@ -47,9 +46,7 @@ const PerfilUsuarioForm: React.FC<PerfilUsuarioFormProps> = ({ usuarioAtual }) =
     try {
       await userService.atualizarUsuario(usuarioAtual.id, dadosUpdate);
       setSuccess('Dados atualizados com sucesso!');
-      // Se o nome ou email (que podem estar no token/sidebar) mudarem,
-      // precisamos informar o AuthContext para buscar o perfil atualizado.
-      await checkAuthStatus(); 
+      await checkAuthStatus();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Erro ao atualizar dados.";
       setError(msg);

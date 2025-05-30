@@ -15,7 +15,7 @@ export class ManutencaoRepository {
          TO_CHAR(MAN_DATA_EXECUCAO, 'YYYY-MM-DD') as "dataExecucao", 
          TO_CHAR(MAN_PROXIMA_DATA, 'YYYY-MM-DD') as "proximaData", 
          TO_CHAR(MAN_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') as "criadoEm"`,
-      [ativoId, descricaoServico, descricaoDetalhada, dataExecucao, proximaData] // Se descricaoDetalhada for undefined, o PG insere NULL automaticamente
+      [ativoId, descricaoServico, descricaoDetalhada, dataExecucao, proximaData]
     );
     return result.rows[0];
   }
@@ -29,10 +29,8 @@ export class ManutencaoRepository {
     if (descricaoServico !== undefined) {
       fields.push(`MAN_DES_SERVICO = $${values.push(descricaoServico)}`);
     }
-    // Se descricaoDetalhada for passada (seja string, vazia, ou null), atualizamos.
-    // Se for omitida (undefined), não alteramos.
     if (manutencao.hasOwnProperty('descricaoDetalhada')) { 
-        fields.push(`MAN_DESCRICAO_DETALHADA = $${values.push(descricaoDetalhada)}`); // Se for null, o PG insere NULL
+        fields.push(`MAN_DESCRICAO_DETALHADA = $${values.push(descricaoDetalhada)}`);
     }
     if (dataExecucao !== undefined) {
       fields.push(`MAN_DATA_EXECUCAO = $${values.push(dataExecucao)}`);
@@ -40,7 +38,6 @@ export class ManutencaoRepository {
     if (manutencao.hasOwnProperty('proximaData')) { 
         fields.push(`MAN_PROXIMA_DATA = $${values.push(proximaData)}`);
     }
-
 
     if (fields.length === 0) {
       const manutencaoExistente = await this.buscarPorId(id);
@@ -59,10 +56,6 @@ export class ManutencaoRepository {
     return result.rows[0] || null;
   }
 
-  // ... (buscarPorId, deletar, listarPorAtivo, listarTodasManutencoesPorUsuario permanecem os mesmos da resposta anterior,
-  // pois eles já lidam com descricaoDetalhada sendo potencialmente null do banco e a formatação de data já está lá) ...
-  
-  // Reafirmando o buscarPorId para clareza com datas formatadas
   static async buscarPorId(id: number): Promise<IManutencaoResponse | null> {
     const result = await pool.query(
       `SELECT MAN_ID as "id", ATV_ID as "ativoId", MAN_DES_SERVICO as "descricaoServico", 

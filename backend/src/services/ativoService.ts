@@ -33,41 +33,24 @@ export class AtivoService {
     dados: IAtivoUpdate,
     solicitanteUsuarioId?: number
   ): Promise<IAtivoResponse> {
-    console.log(
-      `ATIVO SERVICE - ATUALIZAR: Tentando atualizar ativo ID: ${id}, Solicitante ID: ${solicitanteUsuarioId}`
-    );
-
     const ativoExistente = await AtivoRepository.buscarPorId(id);
     if (!ativoExistente) {
       throw new Error("Ativo não encontrado.");
     }
-    console.log(
-      `ATIVO SERVICE - VERIFICAÇÃO: solicitanteUsuarioId=${solicitanteUsuarioId} (tipo: ${typeof solicitanteUsuarioId})`
-    );
-    console.log(
-      `ATIVO SERVICE - VERIFICAÇÃO: ativoExistente.usuarioId=${
-        ativoExistente.usuarioId
-      } (tipo: ${typeof ativoExistente.usuarioId})`
-    );
 
     if (
       solicitanteUsuarioId !== undefined &&
       ativoExistente.usuarioId !== solicitanteUsuarioId
     ) {
-      console.error(
-        `ATIVO SERVICE - ATUALIZAR: FALHA NA AUTORIZAÇÃO! Dono: ${ativoExistente.usuarioId}, Solicitante: ${solicitanteUsuarioId}`
-      );
-
       throw new Error("Não autorizado a atualizar este ativo.");
     }
 
     if (Object.keys(dados).length === 0) {
       throw new Error("Nenhum dado fornecido para atualização.");
     }
-    // ... o restante da lógica de atualização
+
     const ativo = await AtivoRepository.atualizar(id, dados);
     if (!ativo) {
-      // Esta verificação pode ser redundante se buscarPorId já confirmou
       throw new Error("Ativo não encontrado após tentativa de atualização.");
     }
     return ativo;
@@ -90,7 +73,6 @@ export class AtivoService {
 
     const ativo = await AtivoRepository.deletar(id);
     if (!ativo) {
-      // Esta verificação pode ser redundante
       throw new Error("Ativo não encontrado após tentativa de deleção.");
     }
     return ativo;

@@ -2,9 +2,8 @@ import type {
   IManutencaoResponse, 
   IManutencaoUpdate,
   IManutencaoPendentePainel 
-} from '../../../backend/src/interfaces/manutencao.interface'; // Ajuste o caminho
+} from '../../../backend/src/interfaces/manutencao.interface';
 
-// Reutilizar a URL base e a função fetchApi (idealmente, mova fetchApi para um utils/api.ts)
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
@@ -28,13 +27,13 @@ async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
   return response.json();
 }
 
-// Interface para dados do formulário de criação de manutenção
+
 export interface IManutencaoFormData {
-  ativoId: number; // Necessário para associar a manutenção ao ativo correto
+  ativoId: number; 
   descricaoServico: string;
   descricaoDetalhada?: string;
-  dataExecucao: string; // Enviar como string YYYY-MM-DD
-  proximaData?: string | null; // Enviar como string YYYY-MM-DD ou null
+  dataExecucao: string; 
+  proximaData?: string | null;
 }
 
 

@@ -12,7 +12,7 @@ router.use((req, res, next) => {
 router.use(authMiddleware); 
 
 router.post("/manutencoes", ManutencaoController.criar);
-router.get("/manutencoes/historico", ManutencaoController.listarManutencoesUsuario); // Para o histórico do usuário
+router.get("/manutencoes/historico", ManutencaoController.listarManutencoesUsuario);
 router.get("/manutencoes/pendentes", ManutencaoController.listarPendentes);  
 router.put("/manutencoes/:id", ManutencaoController.atualizar);
 router.delete("/manutencoes/:id", ManutencaoController.deletar);

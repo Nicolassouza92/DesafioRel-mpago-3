@@ -1,5 +1,5 @@
 import React from 'react';
-import RegisterForm from '../components/auth/RegisterForm'; // Assumindo que RegisterForm.tsx está em components/auth/
+import RegisterForm from '../components/auth/RegisterForm';
 import { Typography, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 

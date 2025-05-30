@@ -9,10 +9,10 @@ router.use((req, res, next) => {
   next();
 });
 
-// Rotas Públicas (não precisam de autenticação)
+
 router.post('/usuarios/registrar', UserController.criar);
 router.post('/usuarios/login', UserController.login);
-router.post('/usuarios/logout', UserController.logout); // Adicionaremos este endpoint
+router.post('/usuarios/logout', UserController.logout);
 
 
 router.get('/usuarios/perfil', authMiddleware, UserController.getProfile);

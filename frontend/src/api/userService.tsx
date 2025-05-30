@@ -1,8 +1,7 @@
-import type { IUserResponse, IUserUpdate } from '../../../backend/src/interfaces/user.interface'; // Ajuste o caminho
+import type { IUserResponse, IUserUpdate } from '../../../backend/src/interfaces/user.interface';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
-// Reutilize ou crie uma função fetchApi similar à de authService e ativoService, COM 'credentials: "include"'
 async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
   const defaultOptions: RequestInit = {
     credentials: 'include',
@@ -24,12 +23,9 @@ async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
   return response.json();
 }
 
-
 export const atualizarUsuario = async (id: number, dadosUpdate: IUserUpdate): Promise<IUserResponse> => {
   return fetchApi<IUserResponse>(`${API_BASE_URL}/usuarios/${id}`, {
     method: 'PUT',
     body: JSON.stringify(dadosUpdate),
   });
 };
-
-// Poderíamos adicionar getUsuario(id) se necessário, mas o perfil já vem do AuthContext.
